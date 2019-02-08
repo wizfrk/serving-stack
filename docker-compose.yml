@@ -1,0 +1,69 @@
+---
+version: '3'
+services:
+  plex:
+    image: lsioarmhf/plex:latest
+    restart: unless-stopped
+    environment:
+      - 'PUID=${PIUD}'
+      - 'PGID=${PGID}'
+      - 'TZ=${TZ}'
+    volumes:
+      - '${CONFIG}/plex:/config'
+      - '${MEDIA}/tv:/tvshows'
+      - '${MEDIA}/anime:/anime'
+      - '${MEDIA}/movies:/movies'
+      - '${MEDIA}/music:/music'
+      - '${MEDIA}/pictures:/pictures'
+      - '${DOWNLOADS}/watched:/downloads'
+    network_mode: "host"
+  gazee:
+    image: linuxserver/gazee:latest
+    restart: unless-stopped
+    environment:
+      - 'PUID=${PIUD}'
+      - 'PGID=${PGID}'
+      - 'TZ=${TZ}'
+    volumes:
+      - '${CONFIG}/gazee:/config'
+      - '${CONFIG}/mylar:/mylar'
+      - '${CONFIG}/certs:/certs'
+      - '${MEDIA}/comics:/comics'
+    ports:
+      - 4242:4242
+  calibre-web:
+    image: lsioarmhf/calibre-web:latest
+    restart: unless-stopped
+    environment:
+      - 'PUID=${PIUD}'
+      - 'PGID=${PGID}'
+      - 'TZ=${TZ}'
+    volumes:
+      - '${CONFIG}/calibre-web:/config'
+      - '${MEDIA}/books:/books'
+    ports:
+      - 8083:8083
+  ubooquity:
+    image: lsioarmhf/ubooquity:latest
+    restart: unless-stopped
+    environment:
+      - 'PUID=${PIUD}'
+      - 'PGID=${PGID}'
+      - 'TZ=${TZ}'
+    volumes:
+      - '${CONFIG}/calibre-web:/config'
+      - '${MEDIA}/books:/books'
+    ports:
+      - 8083:8083
+  booksonic:
+    image: lsioarmhf/booksonic:latest
+    restart: unless-stopped
+    environment:
+      - 'PUID=${PIUD}'
+      - 'PGID=${PGID}'
+      - 'TZ=${TZ}'
+    volumes:
+      - '${CONFIG}/calibre-web:/config'
+      - '${MEDIA}/books:/books'
+    ports:
+      - 8083:8083
